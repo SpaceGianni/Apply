@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateNewsDto } from '../dto/create-news.dto';
+import { Hit } from '../interfaces/news.interface';
 import { NewsProvider } from '../provider/news.provider';
 import { NewsRepository } from '../repository/news.repository';
 
@@ -9,16 +11,21 @@ export class NewsService {
     private readonly newsRepository: NewsRepository,
   ) {}
 
-  async findAndSaveNews() {
-    const rawNews = await this.newsProvider.findAll();
-    for (const news of rawNews.hits) {
-      //validar datos
-      await this.newsRepository.create({
-        title: news.title || news.story_title,
-        url: news.url || news.story_url,
-        author: news.author,
-        date: news.created_at,
-      });
+  async findAndSaveNews(): Promise<CreateNewsDto[]> {
+    //const rawNews = await this.newsProvider.findAll();
+    //console.log(rawNews.hits[0]);
+    const newsList = [];
+    const { hits } = await this.newsProvider.findAll();
+    for (const hit of hits) {
+      const objectNews = new CreateNewsDto();
+      objectNews.author = hit.author;
+      objectNews.date = hit.created_at;
+      objectNews.title = hit.story_title || hit.title;
+      objectNews.url = hit.url || hit.story_url;
+      const news = await this.newsRepository.create(objectNews);
+      objectNews.id = news._id;
+      newsList.push(objectNews);
     }
+    return newsList;
   }
 }

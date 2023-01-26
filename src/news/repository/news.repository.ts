@@ -10,8 +10,8 @@ export class NewsRepository {
     @InjectModel(News.name) private readonly newsModel: Model<News>,
   ) {}
 
-  create(news: CreateNewsDto): Promise<News> {
-    const createNews = new this.newsModel(news);
+  create(createNewsDto: CreateNewsDto): Promise<News> {
+    const createNews = new this.newsModel(createNewsDto);
     return createNews.save();
   }
 }

@@ -1,15 +1,19 @@
-import { IsString, IsDate } from 'class-validator';
+import { IsString, IsDate, IsMongoId } from 'class-validator';
+import { Date } from 'mongoose';
 
 export class CreateNewsDto {
-  @IsString()
-  readonly title: string;
+  @IsMongoId()
+  id: string;
 
   @IsString()
-  readonly author: string;
+  title: string;
 
   @IsString()
-  readonly url: string;
+  author: string;
+
+  @IsString()
+  url: string;
 
   @IsDate()
-  readonly date: Date;
+  date: string;
 }

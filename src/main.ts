@@ -7,11 +7,10 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      // whitelist: true,
-      forbidNonWhitelisted: true,
+      skipNullProperties: true,
+      transform: true,
     }),
   );
-
   await app.listen(3000);
 }
 bootstrap();

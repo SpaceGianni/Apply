@@ -20,7 +20,7 @@ export interface Exhaustive {
 }
 
 export interface Hit {
-  created_at: Date;
+  created_at: string;
   title: null | string;
   url: null | string;
   author: string;
